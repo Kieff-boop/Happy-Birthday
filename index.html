@@ -117,6 +117,12 @@
   .photo.hearted::after { content: "💗"; }
   .photo:has(img[hidden])::after { content: ""; }
 
+  /* six more photos, they step left and right and follow each picture's shape */
+  .steps { margin-top: 28px; display: flex; flex-direction: column; gap: 22px; }
+  .steps .photo { width: 70%; margin: 0; transform: none; aspect-ratio: 4 / 3; border-radius: 22px; font-size: 1.2rem; }
+  .steps .photo:nth-child(odd)  { align-self: flex-start; }
+  .steps .photo:nth-child(even) { align-self: flex-end; }
+
   /* music button */
   #music {
     position: fixed; right: 16px; bottom: 16px; z-index: 5;
@@ -163,6 +169,16 @@
   <div class="bottom">
     <figure class="photo b5 pop">Photo 5<img src="photos/5.jpg" alt="" onerror="this.hidden=true"></figure>
     <figure class="photo b6 pop">Photo 6<img src="photos/6.jpg" alt="" onerror="this.hidden=true"></figure>
+  </div>
+
+  <!-- photos 7 to 12 -->
+  <div class="steps">
+    <figure class="photo pop">Photo 7<img src="photos/7.jpg" alt="" onerror="this.hidden=true"></figure>
+    <figure class="photo pop">Photo 8<img src="photos/8.jpg" alt="" onerror="this.hidden=true"></figure>
+    <figure class="photo pop">Photo 9<img src="photos/9.jpg" alt="" onerror="this.hidden=true"></figure>
+    <figure class="photo pop">Photo 10<img src="photos/10.jpg" alt="" onerror="this.hidden=true"></figure>
+    <figure class="photo pop">Photo 11<img src="photos/11.jpg" alt="" onerror="this.hidden=true"></figure>
+    <figure class="photo pop">Photo 12<img src="photos/12.jpg" alt="" onerror="this.hidden=true"></figure>
   </div>
 </main>
 
