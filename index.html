@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy Birthday Love!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg1: #ffd6e4;
+    --bg2: #ffb3cd;
+    --card: #fff7fa;
+    --ink: #7a2547;
+    --line: #c9467a;
+    --pop: #ff6fa3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Gaegu", "Comic Sans MS", cursive;
+    color: var(--ink);
+    background: linear-gradient(180deg, var(--bg1), var(--bg2));
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding: 24px 0 48px;
+    overflow-x: hidden;
+  }
+
+  /* floating emojis */
+  #sky { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  #sky span {
+    position: absolute;
+    top: -60px;
+    animation: fall linear forwards;
+    opacity: .9;
+  }
+  @keyframes fall {
+    to { transform: translateY(115vh) rotate(360deg); }
+  }
+
+  /* the tall frame from the sketch */
+  .strip {
+    position: relative;
+    z-index: 1;
+    width: min(92vw, 440px);
+    margin: 0 auto;
+    padding: 36px 22px 44px;
+    border: 2.5px solid var(--line);
+    border-radius: 44px;
+    background: rgba(255, 247, 250, .62);
+    backdrop-filter: blur(3px);
+  }
+
+  h1 {
+    text-align: center;
+    font-size: clamp(2.3rem, 9vw, 3.1rem);
+    line-height: 1.05;
+    font-weight: 700;
+    margin-bottom: 40px;
+  }
+
+  /* tilted photos */
+  .photo {
+    width: 66%;
+    aspect-ratio: 1;
+    margin-bottom: 30px;
+    border: 2.5px solid var(--line);
+    border-radius: 26px;
+    background: var(--card);
+    overflow: hidden;
+    position: relative;
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    box-shadow: 0 8px 0 rgba(201, 70, 122, .18);
+  }
+  .photo img { display: block; width: 100%; height: auto; }
+  .photo img[hidden] { display: none; }
+  /* once a real picture loads, the box takes the picture's shape */
+  .photo:has(img:not([hidden])) { aspect-ratio: auto; font-size: 0; }
+  /* same tilt on every photo, they alternate left and right and overlap a little */
+  .p1, .p3 { margin-right: auto; transform: rotate(-8deg); }
+  .p2, .p4 { margin-left: auto;  transform: rotate(8deg); }
+  .p1, .p2, .p3 { margin-bottom: -20px; }
+  .p1 { z-index: 1; } .p2 { z-index: 2; } .p3 { z-index: 3; } .p4 { z-index: 4; }
+
+  /* scroll reveal, one simple pop */
+  .pop { opacity: 0; scale: .85; transition: opacity .6s ease, scale .6s cubic-bezier(.3,1.5,.5,1); }
+  .pop.in { opacity: 1; scale: 1; }
+
+  /* message box */
+  .message {
+    margin: 50px 0 34px;
+    padding: 30px 24px;
+    border: 2.5px solid var(--line);
+    border-radius: 28px;
+    background: var(--card);
+    font-size: 1.3rem;
+    line-height: 1.4;
+    text-align: left;
+  }
+  .message .greet { text-align: center; font-weight: 700; font-size: 1.8rem; }
+  .message p + p { margin-top: 14px; }
+  .message .sign { margin-top: 20px; font-weight: 700; font-size: 1.6rem; text-align: center; }
+
+  /* two small boxes at the bottom */
+  /* bottom row, both photos have the same height, photo 6 is wider */
+  .bottom { display: flex; gap: 16px; align-items: stretch; }
+  .bottom .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .b5 { flex: 1; }
+  /* photo 6 box has the same shape as the picture (1080 x 775), so nothing gets cut */
+  .bottom .photo.b6 { flex: 0 0 66%; aspect-ratio: 1080 / 775; }
+  .bottom .photo { margin: 0; transform: none; font-size: 1.1rem; border-radius: 22px; }
+
+  .photo.hearted::after { content: "💗"; }
+  .photo:has(img[hidden])::after { content: ""; }
+
+  /* music button */
+  #music {
+    position: fixed; right: 16px; bottom: 16px; z-index: 5;
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 2.5px solid var(--line);
+    background: var(--card);
+    font-size: 1.5rem; cursor: pointer;
+    box-shadow: 0 5px 0 rgba(201, 70, 122, .25);
+  }
+  #music svg { width: 22px; height: 22px; fill: var(--line); display: block; margin: auto; }
+  #music:focus-visible { outline: 3px solid var(--pop); outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #sky { display: none; }
+    .pop { opacity: 1; scale: 1; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div id="sky" aria-hidden="true"></div>
+
+<main class="strip">
+  <h1>Happy Birthday Love!</h1>
+
+  <!-- Put your photos in a folder called photos and name them 1.jpg to 6.jpg -->
+  <figure class="photo p1 pop">Photo 1<img src="photos/1.jpg" alt="" onerror="this.hidden=true"></figure>
+  <figure class="photo p2 pop">Photo 2<img src="photos/2.jpg" alt="" onerror="this.hidden=true"></figure>
+  <figure class="photo p3 pop">Photo 3<img src="photos/3.jpg" alt="" onerror="this.hidden=true"></figure>
+  <figure class="photo p4 pop">Photo 4<img src="photos/4.jpg" alt="" onerror="this.hidden=true"></figure>
+
+  <!-- CHANGE YOUR MESSAGE HERE. Each <p> is one paragraph. -->
+  <section class="message pop">
+    <p class="greet">Happy Birthday my Love!</p>
+
+    <p>First of all I want to say that it's your day again mahal ko and your mom is here too, I hope you feel that today you are special, that today you are cared for and cherished by the people around you, me, your family and your friends. I pray to God that he blesses you with all the things that you wish for, for the things you want in your life, for the things you need, and for your hopes and dreams.</p>
+
+    <p>I love you and that I am proud of who you are, and that is someone who knows what she wants in life, someone who can adjust to whatever situation she is in, someone who can vibe with any person she meets, someone who is kind and caring, someone who is very very funny and charming, and someone I can love for the rest of my life. Thank you for being my light at the end of a tunnel, thank you for always making me laugh when I am sad, thank you for making me feel loved, thank you for making me feel that I am not alone in this world. I can never repay the blessing that you are to me so I pray to God that he rewards you with everything that you want in your life.</p>
+
+    <p class="sign">I love you so much Vien.</p>
+  </section>
+
+  <div class="bottom">
+    <figure class="photo b5 pop">Photo 5<img src="photos/5.jpg" alt="" onerror="this.hidden=true"></figure>
+    <figure class="photo b6 pop">Photo 6<img src="photos/6.jpg" alt="" onerror="this.hidden=true"></figure>
+  </div>
+</main>
+
+<!-- Put your song in a folder called music and name it song.mp3 -->
+<audio id="song" src="music/song.mp3" loop preload="auto"></audio>
+<button id="music" type="button" aria-label="Play music"></button>
+
+<script>
+  // reveal photos as you scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { threshold: 0.2 });
+  document.querySelectorAll(".pop").forEach(el => io.observe(el));
+
+  // music, browsers only allow sound after a tap, so it starts on her first tap or click
+  const song = document.getElementById("song");
+  const musicBtn = document.getElementById("music");
+  let userPaused = false;
+  const PLAY = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+  const PAUSE = '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+  const sync = () => {
+    musicBtn.innerHTML = song.paused ? PLAY : PAUSE;
+    musicBtn.setAttribute("aria-label", song.paused ? "Play music" : "Pause music");
+  };
+  sync();
+  song.addEventListener("play", sync);
+  song.addEventListener("pause", sync);
+  musicBtn.addEventListener("click", () => {
+    if (song.paused) { userPaused = false; song.play().catch(() => {}); }
+    else { userPaused = true; song.pause(); }
+  });
+  function firstTap(e) {
+    if (e.target === musicBtn || userPaused || !song.paused) return;
+    song.play().then(() => {
+      ["pointerdown", "keydown"].forEach(t => document.removeEventListener(t, firstTap));
+    }).catch(() => {});
+  }
+  ["pointerdown", "keydown"].forEach(t => document.addEventListener(t, firstTap));
+
+  // falling hearts and teddy bears
+  const sky = document.getElementById("sky");
+  const icons = ["💖", "🧸", "💗", "💕", "🧸", "🌸", "💝"];
+  function drop() {
+    const s = document.createElement("span");
+    s.textContent = icons[Math.floor(Math.random() * icons.length)];
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.fontSize = 18 + Math.random() * 22 + "px";
+    const t = 7 + Math.random() * 7;
+    s.style.animationDuration = t + "s";
+    sky.appendChild(s);
+    setTimeout(() => s.remove(), t * 1000);
+  }
+  for (let i = 0; i < 10; i++) setTimeout(drop, i * 350);
+  setInterval(drop, 650);
+</script>
+</body>
+</html>
